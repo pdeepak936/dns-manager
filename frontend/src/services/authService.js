@@ -1,7 +1,7 @@
 import axios from 'axios';
-import jwtDecode from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 
-const API_BASE_URL = 'http://localhost:3001/api';
+const API_BASE_URL = 'http://localhost:8001/api';
 
 const login = async (email, password) => {
     try {
@@ -9,6 +9,15 @@ const login = async (email, password) => {
         const { token } = response.data;
         localStorage.setItem('token', token);
         return jwtDecode(token);
+    } catch (error) {
+        throw error;
+    }
+};
+
+const register = async (email, password) => {
+    try {
+        const response = await axios.post(`${API_BASE_URL}/users/register`, { email, password });
+        return response.data;
     } catch (error) {
         throw error;
     }
@@ -36,6 +45,7 @@ const isAuthenticated = () => {
 
 export default {
     login,
+    register,
     logout,
     isAuthenticated,
     getToken,

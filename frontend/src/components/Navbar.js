@@ -6,7 +6,7 @@ const Navbar = () => {
         <nav>
             <h1>DNS Manager</h1>
             <ul>
-                <li>
+                <li className="pr-5">
                     <Link to="/">Home</Link>
                 </li>
                 <li>

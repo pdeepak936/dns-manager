@@ -5,6 +5,7 @@ import ChartComponent from './Chart';
 import BulkUpload from './BulkUpload';
 import apiService from '../services/apiService';
 import { toast } from 'react-toastify';
+import Navbar from './Navbar';
 
 const Dashboard = () => {
     const [records, setRecords] = useState([]);
@@ -31,6 +32,7 @@ const Dashboard = () => {
     };
 
     const handleDelete = async (id) => {
+        console.log(id);
         try {
             await apiService.deleteRecord(id);
             toast.success('Record deleted successfully.');
@@ -46,7 +48,7 @@ const Dashboard = () => {
 
     const handleUpdate = async (updatedRecord) => {
         try {
-            await apiService.updateRecord(updatedRecord._id, updatedRecord);
+            await apiService.createRecord( updatedRecord);
             toast.success('Record updated successfully.');
             fetchRecords();
             setSelectedRecord(null);
@@ -64,10 +66,13 @@ const Dashboard = () => {
 
     return (
         <div>
+            <Navbar />
             <h1>DNS Manager Dashboard</h1>
             {loading ? <p>Loading...</p> : null}
             <DNSForm fetchRecords={fetchRecords} selectedRecord={selectedRecord} handleUpdate={handleUpdate} />
+            <hr></hr>
             <BulkUpload fetchRecords={fetchRecords} />
+            <hr />
             <h2>DNS Records</h2>
             <div>
                 <input
@@ -107,6 +112,7 @@ const Dashboard = () => {
                 </tbody>
             </table>
             <h2>Record Type Distribution</h2>
+            <hr />
             <ChartComponent records={records} />
         </div>
     );

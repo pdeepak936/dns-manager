@@ -1,6 +1,7 @@
 import React from 'react';
 
 const DNSRecord = ({ record, onDelete, onEdit }) => {
+    
     return (
         <tr>
             <td>{record.domain}</td>
