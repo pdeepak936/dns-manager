@@ -1,13 +1,13 @@
 const User = require('../models/userModel');
-const bcrypt = require('bcryptjs');
+const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const config = require('../config');
 
 exports.register = async (req, res, next) => {
     try {
-        const salt = bcrypt.genSaltSync(10);
-        const hash = bcrypt.hashSync(req.body.password, salt);
-
+        console.log("message1",req.body);
+        const hash = bcrypt.hash(req.body.password, 10);
+        console.log("message", hash)
         const newUser = new User({
             ...req.body,
             password: hash,

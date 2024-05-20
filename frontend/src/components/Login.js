@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useHistory, Link } from 'react-router-dom';
+import { useNavigate, NavLink } from 'react-router-dom';
 import axios from 'axios';
 import { Form, Button, Card, Alert } from 'react-bootstrap';
 
@@ -7,7 +7,7 @@ const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
-    const history = useHistory();
+    const history = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -53,7 +53,7 @@ const Login = () => {
                     </Button>
                 </Form>
                 <div className="mt-3">
-                    <Link to="/register">Don't have an account? Register</Link>
+                    <NavLink to="/register">Don't have an account? Register</NavLink>
                 </div>
             </Card.Body>
         </Card>

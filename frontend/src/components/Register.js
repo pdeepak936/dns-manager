@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useHistory, Link } from 'react-router-dom';
+import { useNavigate, NavLink } from 'react-router-dom';
 import axios from 'axios';
 import { Form, Button, Card, Alert } from 'react-bootstrap';
 
@@ -7,13 +7,16 @@ const Register = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
-    const history = useHistory();
+    const history = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.post('http://localhost:8001/api/auth/register', { email, password });
-            history.push('/login');
+            console.log(JSON.stringify({ email, password }))
+            debugger
+            const responce = await axios.post('http://localhost:8001/api/auth/register', { email, password });
+            
+            // history.push('/login');
         } catch (err) {
             setError('Registration failed');
         }
@@ -52,7 +55,7 @@ const Register = () => {
                     </Button>
                 </Form>
                 <div className="mt-3">
-                    <Link to="/login">Already have an account? Login</Link>
+                    <NavLink to="/login">Already have an account? Login</NavLink>
                 </div>
             </Card.Body>
         </Card>
