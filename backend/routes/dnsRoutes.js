@@ -1,11 +1,12 @@
 const express = require('express');
-const router = express.Router();
-const dnsController = require('../controllers/dnsController');
-const auth = require('../middleware/auth');
+const { getAllRecords, createRecord, updateRecord, deleteRecord } = require('../controllers/dnsController');
+const { auth } = require('../middleware/auth');
 
-router.get('/', auth, dnsController.getAllRecords);
-router.post('/', auth, dnsController.createRecord);
-router.put('/:id', auth, dnsController.updateRecord);
-router.delete('/:id', auth, dnsController.deleteRecord);
+const router = express.Router();
+
+router.get('/', auth, getAllRecords);
+router.post('/', auth, createRecord);
+router.put('/:id', auth, updateRecord);
+router.delete('/:id', auth, deleteRecord);
 
 module.exports = router;

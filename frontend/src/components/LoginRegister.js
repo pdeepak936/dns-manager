@@ -1,32 +1,34 @@
 import React, { useState } from 'react';
-import { useHistory, Link } from 'react-router-dom';
-import axios from 'axios';
 import { Form, Button, Card, Alert } from 'react-bootstrap';
+import apiService from '../services/apiService';
 
-const Login = () => {
+const LoginRegister = ({ type }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
-    const history = useHistory();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:8001/api/auth/login', { email, password });
-            localStorage.setItem('authToken', response.data.token);
-            history.push('/dashboard');
+            if (type === 'login') {
+                const response = await apiService.login({ email, password });
+                localStorage.setItem('token', response.token);
+            } else {
+                await apiService.register({ email, password });
+            }
+            window.location.href = '/';
         } catch (err) {
-            setError('Invalid email or password');
+            setError(err.response.data.message);
         }
     };
 
     return (
         <Card>
             <Card.Body>
-                <h2 className="mb-3">Login</h2>
+                <h2>{type === 'login' ? 'Login' : 'Register'}</h2>
                 {error && <Alert variant="danger">{error}</Alert>}
                 <Form onSubmit={handleSubmit}>
-                    <Form.Group controlId="formBasicEmail">
+                    <Form.Group controlId="email">
                         <Form.Label>Email address</Form.Label>
                         <Form.Control
                             type="email"
@@ -37,7 +39,7 @@ const Login = () => {
                         />
                     </Form.Group>
 
-                    <Form.Group controlId="formBasicPassword">
+                    <Form.Group controlId="password">
                         <Form.Label>Password</Form.Label>
                         <Form.Control
                             type="password"
@@ -49,15 +51,15 @@ const Login = () => {
                     </Form.Group>
 
                     <Button variant="primary" type="submit">
-                        Login
+                        {type === 'login' ? 'Login' : 'Register'}
                     </Button>
                 </Form>
-                <div className="mt-3">
-                    <Link to="/register">Don't have an account? Register</Link>
-                </div>
+                <Button variant="link" onClick={() => window.location.href = type === 'login' ? '/register' : '/login'}>
+                    {type === 'login' ? 'Register' : 'Login'} here
+                </Button>
             </Card.Body>
         </Card>
     );
 };
 
-export default Login;
+export default LoginRegister;
