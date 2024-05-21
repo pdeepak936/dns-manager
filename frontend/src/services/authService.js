@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 
-const API_BASE_URL = 'http://localhost:8001/api';
+const API_BASE_URL = 'https://dns-manager-9fny.onrender.com/api';
 
 const login = async (email, password) => {
     try {

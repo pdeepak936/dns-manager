@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:8001/api';
+const API_BASE_URL = 'https://dns-manager-9fny.onrender.com/api';
 
 const login = async (credentials) => {
     const response = await axios.post(`${API_BASE_URL}/auth/login`, credentials);
