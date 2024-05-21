@@ -18,7 +18,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon app.js",
-    "dev": "nodemon app.js"
+    "dev": "nodemon app.js",
+    "build": "npm install && npm run build-server",
+    "build-server": "echo 'Building server...' && npm run compile-server"
   },
   "author": "",
   "license": "ISC",
