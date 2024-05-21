@@ -32,7 +32,6 @@ const Dashboard = () => {
     };
 
     const handleDelete = async (id) => {
-        console.log(id);
         try {
             await apiService.deleteRecord(id);
             toast.success('Record deleted successfully.');
@@ -48,7 +47,7 @@ const Dashboard = () => {
 
     const handleUpdate = async (updatedRecord) => {
         try {
-            await apiService.createRecord( updatedRecord);
+            await apiService.updateRecord(updatedRecord._id, updatedRecord);
             toast.success('Record updated successfully.');
             fetchRecords();
             setSelectedRecord(null);
@@ -66,54 +65,60 @@ const Dashboard = () => {
 
     return (
         <div>
-            <Navbar />
-            <h1>DNS Manager Dashboard</h1>
-            {loading ? <p>Loading...</p> : null}
-            <DNSForm fetchRecords={fetchRecords} selectedRecord={selectedRecord} handleUpdate={handleUpdate} />
-            <hr></hr>
-            <BulkUpload fetchRecords={fetchRecords} />
-            <hr />
-            <h2>DNS Records</h2>
-            <div>
-                <input
-                    type="text"
-                    placeholder="Search..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                />
-                <select value={filterType} onChange={(e) => setFilterType(e.target.value)}>
-                    <option value="">All Types</option>
-                    <option value="A">A</option>
-                    <option value="AAAA">AAAA</option>
-                    <option value="CNAME">CNAME</option>
-                    <option value="MX">MX</option>
-                    <option value="NS">NS</option>
-                    <option value="PTR">PTR</option>
-                    <option value="SOA">SOA</option>
-                    <option value="SRV">SRV</option>
-                    <option value="TXT">TXT</option>
-                    <option value="DNSSEC">DNSSEC</option>
-                </select>
+            <div className="container mt-4">
+                <h1 className="mb-4">DNS Manager Dashboard</h1>
+                {loading && <div className="alert alert-info">Loading...</div>}
+                <DNSForm fetchRecords={fetchRecords} selectedRecord={selectedRecord} handleUpdate={handleUpdate} />
+                <hr />
+                <BulkUpload fetchRecords={fetchRecords} />
+                <hr />
+                <h2>DNS Records</h2>
+                <div className="row mb-3">
+                    <div className="col-md-6">
+                        <input
+                            type="text"
+                            className="form-control"
+                            placeholder="Search..."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                        />
+                    </div>
+                    <div className="col-md-6">
+                        <select className="form-control" value={filterType} onChange={(e) => setFilterType(e.target.value)}>
+                            <option value="">All Types</option>
+                            <option value="A">A</option>
+                            <option value="AAAA">AAAA</option>
+                            <option value="CNAME">CNAME</option>
+                            <option value="MX">MX</option>
+                            <option value="NS">NS</option>
+                            <option value="PTR">PTR</option>
+                            <option value="SOA">SOA</option>
+                            <option value="SRV">SRV</option>
+                            <option value="TXT">TXT</option>
+                            <option value="DNSSEC">DNSSEC</option>
+                        </select>
+                    </div>
+                </div>
+                <table className="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Domain</th>
+                            <th>Type</th>
+                            <th>Value</th>
+                            <th>TTL</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {filteredRecords.map(record => (
+                            <DNSRecord key={record._id} record={record} onDelete={handleDelete} onEdit={handleEdit} />
+                        ))}
+                    </tbody>
+                </table>
+                <h2>Record Type Distribution</h2>
+                <hr />
+                <ChartComponent records={records} />
             </div>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Domain</th>
-                        <th>Type</th>
-                        <th>Value</th>
-                        <th>TTL</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {filteredRecords.map(record => (
-                        <DNSRecord key={record._id} record={record} onDelete={handleDelete} onEdit={handleEdit} />
-                    ))}
-                </tbody>
-            </table>
-            <h2>Record Type Distribution</h2>
-            <hr />
-            <ChartComponent records={records} />
         </div>
     );
 };

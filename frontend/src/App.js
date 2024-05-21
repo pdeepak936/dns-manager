@@ -1,57 +1,31 @@
-// import React from 'react';
-// import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-// import { ToastContainer } from 'react-toastify';
-// import 'react-toastify/dist/ReactToastify.css';
-// import 'bootstrap/dist/css/bootstrap.min.css';
-// import Dashboard from './components/Dashboard';
-// import Login from './components/Login';
-// import Register from './components/Register';
-// import ProtectedRoute from './components/ProtectedRoute';
-
-// function App() {
-//     return (
-//         <Router>
-//             <div className="App">
-//                 <ToastContainer />
-//                 <Routes>
-//                     <Route path="/login" element={<Login />} />
-//                     <Route path="/register" element={<Register />} />
-//                     <Route path="/*" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-//                 </Routes>
-//             </div>
-//         </Router>
-//     );
-// }
-
-// export default App;
-
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import Dashboard from './components/Dashboard';
-import Login from './components/Login';
-import Register from './components/Register';
+import DNSForm from './components/DNSForm';
+import DNSRecord from './components/DNSRecordsPage';
+import Navbar from './components/Navbar';
 import LoginRegister from './components/LoginRegister';
 import ProtectedRoute from './components/ProtectedRoute';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import 'react-toastify/dist/ReactToastify.css';
+import 'bootstrap/dist/css/bootstrap.css';
 
-function App() {
+
+
+const App = () => {
+    const isAuthenticated = !!localStorage.getItem('access_token');
     return (
         <Router>
+            <Navbar />
             <Routes>
-                <Route path="/login" element={<Login />} />
-                <Route path="/register" element={<Register />} />
-                <Route path="/loginregister" element={<LoginRegister />} />
-                <Route
-                    path="/*"
-                    element={
-                        <ProtectedRoute>
-                            <Dashboard />
-                        </ProtectedRoute>
-                    }
-                />
+                <Route path="/login" element={<LoginRegister type="login" />} />
+                <Route path="/register" element={<LoginRegister type="register" />} />
+                <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+                <Route path="/dnsform" element={<ProtectedRoute><DNSForm /></ProtectedRoute>} />
+                <Route path="/dnsrecord" element={<ProtectedRoute><DNSRecord /></ProtectedRoute>} />
+                <Route path="/" element={isAuthenticated ? <Navigate to="/dashboard" /> : <Navigate to="/login" />} />
             </Routes>
         </Router>
     );
-}
+};
 
 export default App;

@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { Form, Button, Card, Alert } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 import apiService from '../services/apiService';
 
 const LoginRegister = ({ type }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -13,10 +15,11 @@ const LoginRegister = ({ type }) => {
             if (type === 'login') {
                 const response = await apiService.login({ email, password });
                 localStorage.setItem('token', response.token);
+                navigate('/dashboard'); // Navigate to Dashboard after login
             } else {
                 await apiService.register({ email, password });
+                navigate('/login'); // Navigate to Login after successful registration
             }
-            window.location.href = '/';
         } catch (err) {
             setError(err.response.data.message);
         }
@@ -54,7 +57,7 @@ const LoginRegister = ({ type }) => {
                         {type === 'login' ? 'Login' : 'Register'}
                     </Button>
                 </Form>
-                <Button variant="link" onClick={() => window.location.href = type === 'login' ? '/register' : '/login'}>
+                <Button variant="link" onClick={() => navigate(type === 'login' ? '/register' : '/login')}>
                     {type === 'login' ? 'Register' : 'Login'} here
                 </Button>
             </Card.Body>

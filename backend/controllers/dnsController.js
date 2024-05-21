@@ -1,5 +1,4 @@
 const DNS = require('../models/dnsModel');
-const jwt = require('jsonwebtoken');
 
 exports.getAllRecords = async (req, res) => {
     try {

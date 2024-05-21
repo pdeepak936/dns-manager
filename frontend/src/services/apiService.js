@@ -1,59 +1,60 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:8001/api/dns';
+const API_BASE_URL = 'http://localhost:8001/api';
 
-const getAuthHeaders = () => {
-    const token = localStorage.getItem('token');
-    return {
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-    };
+const login = async (credentials) => {
+    const response = await axios.post(`${API_BASE_URL}/auth/login`, credentials);
+    return response.data;
 };
 
-const getAllRecords = async (search = '', type = '') => {
-    try {
-        const params = {};
-        if (search) params.search = search;
-        if (type) params.type = type;
+const register = async (credentials) => {
+    const response = await axios.post(`${API_BASE_URL}/auth/register`, credentials);
+    return response.data;
+};
 
-        const response = await axios.get(API_BASE_URL, { params, ...getAuthHeaders() });
-        return response.data;
-    } catch (error) {
-        throw error;
-    }
+// Update other API calls to include the token if necessary
+const getAllRecords = async (search = '', type = '') => {
+    const token = localStorage.getItem('token');
+    const params = {};
+    if (search) params.search = search;
+    if (type) params.type = type;
+
+    const response = await axios.get(`${API_BASE_URL}/dns`, {
+        params,
+        headers: { Authorization: `Bearer ${token}` },
+    });
+    return response.data;
 };
 
 const createRecord = async (recordData) => {
-    try {
-        const response = await axios.post(API_BASE_URL, recordData, getAuthHeaders());
-        return response.data;
-    } catch (error) {
-        throw error;
-    }
+    const token = localStorage.getItem('token');
+    const response = await axios.post(`${API_BASE_URL}/dns`, recordData, {
+        headers: { Authorization: `Bearer ${token}` },
+    });
+    return response.data;
 };
 
 const updateRecord = async (recordId, recordData) => {
-    try {
-        const response = await axios.put(`${API_BASE_URL}/${recordId}`, recordData, getAuthHeaders());
-        return response.data;
-    } catch (error) {
-        throw error;
-    }
+    const token = localStorage.getItem('token');
+    const response = await axios.put(`${API_BASE_URL}/dns/${recordId}`, recordData, {
+        headers: { Authorization: `Bearer ${token}` },
+    });
+    return response.data;
 };
 
 const deleteRecord = async (recordId) => {
-    try {
-        const response = await axios.delete(`${API_BASE_URL}/${recordId}`, getAuthHeaders());
-        return response.data;
-    } catch (error) {
-        throw error;
-    }
+    const token = localStorage.getItem('token');
+    const response = await axios.delete(`${API_BASE_URL}/dns/${recordId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+    });
+    return response.data;
 };
 
 export default {
+    login,
+    register,
     getAllRecords,
     createRecord,
     updateRecord,
-    deleteRecord
+    deleteRecord,
 };
