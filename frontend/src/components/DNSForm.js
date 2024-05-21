@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import apiService from '../services/apiService';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const DNSForm = ({ fetchRecords, selectedRecord, handleUpdate }) => {
     const [domain, setDomain] = useState('');
@@ -24,13 +26,16 @@ const DNSForm = ({ fetchRecords, selectedRecord, handleUpdate }) => {
         try {
             if (selectedRecord) {
                 await handleUpdate({ ...record, _id: selectedRecord._id });
+                toast.success('Record updated successfully.');
             } else {
                 await apiService.createRecord(record);
                 if (fetchRecords) fetchRecords();
+                toast.success('Record added successfully.');
             }
             resetForm();
         } catch (error) {
             console.error(error);
+            toast.error('Error: ' + error.message);
         }
     };
 
@@ -40,6 +45,7 @@ const DNSForm = ({ fetchRecords, selectedRecord, handleUpdate }) => {
         setValue('');
         setTtl('');
     };
+
 
     return (
         <div className="container mt-4">

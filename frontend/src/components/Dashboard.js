@@ -4,8 +4,8 @@ import DNSRecord from './DNSRecord';
 import ChartComponent from './Chart';
 import BulkUpload from './BulkUpload';
 import apiService from '../services/apiService';
-import { toast } from 'react-toastify';
-import Navbar from './Navbar';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Dashboard = () => {
     const [records, setRecords] = useState([]);
@@ -65,6 +65,7 @@ const Dashboard = () => {
 
     return (
         <div>
+            <ToastContainer />
             <div className="container mt-4">
                 <h1 className="mb-4">DNS Manager Dashboard</h1>
                 {loading && <div className="alert alert-info">Loading...</div>}

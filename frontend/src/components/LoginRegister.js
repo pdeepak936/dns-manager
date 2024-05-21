@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import { Form, Button, Card, Alert } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import apiService from '../services/apiService';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const LoginRegister = ({ type }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
@@ -21,15 +22,14 @@ const LoginRegister = ({ type }) => {
                 navigate('/login'); // Navigate to Login after successful registration
             }
         } catch (err) {
-            setError(err.response.data.message);
+            toast.error(err.response.data.message);
         }
     };
-
     return (
         <Card>
+            <ToastContainer />
             <Card.Body>
                 <h2>{type === 'login' ? 'Login' : 'Register'}</h2>
-                {error && <Alert variant="danger">{error}</Alert>}
                 <Form onSubmit={handleSubmit}>
                     <Form.Group controlId="email">
                         <Form.Label>Email address</Form.Label>
